@@ -1,12 +1,27 @@
-import { Button } from "./components/ui/button"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Router } from "./Router";
+import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "./app/contexts/AuthContext";
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false
+    }
+  }
+})
 
 function App() {
 
   return (
-    <>
-      <h1>Oi</h1>
-      <Button>Test</Button>
-    </>
+    <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Router/>
+          <Toaster/>
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
 
