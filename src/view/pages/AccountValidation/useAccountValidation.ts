@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { ConfirmationAccountParams } from "../../../app/services/authService/confirmAccount";
 import { authService } from "../../../app/services/authService";
@@ -16,27 +16,27 @@ type FormData = z.infer<typeof schema>
 
 export function useAccountValidation() {
 
+  const { email } = useAuth();
   const { handleSubmit: hookFormSubmit, register, formState: {errors} } = useForm<FormData>({
     resolver: zodResolver(schema)
   });
 
   const navigate = useNavigate();
-  const { email } = useAuth();
 
-  // const { mutateAsync, isLoading } = useMutation({
-  //   mutationKey: ['confirmation'],
-  //   mutationFn: async (data: ConfirmationAccountParams ) => { return authService.confirmAccount(data); }
-  // });
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ['confirmation'],
+    mutationFn: async (data: ConfirmationAccountParams ) => { return authService.confirmAccount(data); }
+  });
 
   const handleSubmit = hookFormSubmit(async (data) => {
     try {
-      // await mutateAsync({...data, email});
-      navigate('/confirmation')
+      await mutateAsync({...data, email});
+      navigate('/login')
     } catch {
       toast.error('Ocorreu um erro ao criar sua conta!!');
     }
   });
 
-  return { handleSubmit, register, errors }
+  return { handleSubmit, isPending, register, errors }
 
 }

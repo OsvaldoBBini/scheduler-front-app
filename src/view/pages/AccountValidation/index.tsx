@@ -4,18 +4,19 @@ import { useAccountValidation } from "./useAccountValidation";
 
 export function AccountValidation() {
 
-  const { register, errors } = useAccountValidation(); 
+  const { handleSubmit, isPending, register, errors } = useAccountValidation(); 
 
   return (
       <form 
         action=""
+        onSubmit={handleSubmit}
         className="mt-[60px] flex flex-col gap-4"
       >
         <Input 
           placeholder="Código de verificação" 
           {...register('confirmationCode')}
           error={errors.confirmationCode?.message}/>
-        <Button type="submit">
+        <Button type="submit" isPending={isPending}>
           Validar
         </Button>
       </form>
