@@ -7,8 +7,10 @@ import toast from "react-hot-toast";
 
 interface AuthContextValue {
   signedIn: boolean;
+  email: string;
+  signout(): void;
   signin(accessToken: string): void
-  signout(): void
+  setUserEmail(userEmail: string): void;
 }
 
 export const AuthContext = createContext({} as AuthContextValue);
@@ -16,6 +18,8 @@ export const AuthContext = createContext({} as AuthContextValue);
 export function AuthProvider({ children }: {
   children: React.ReactNode
 }) {
+
+  const [email, setEmail] = useState<string>('');
 
   const [signedIn, setSignedIn] = useState<boolean>(() => {
     const storageAccessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
@@ -25,6 +29,10 @@ export function AuthProvider({ children }: {
   const setAccessToken = useCallback(( accessToken: string ) => {
     httpClient.defaults.headers.Authorization = `Bearer ${accessToken}`
   },[]);
+
+  const setUserEmail = useCallback(( userEmail: string ) => {
+    setEmail(userEmail);
+  }, []);
 
   useEffect(() => {
     const storedAccessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
@@ -60,7 +68,7 @@ export function AuthProvider({ children }: {
   }, [isError, signout]);
 
   return (
-    <AuthContext.Provider value={{signedIn, signin, signout}}>
+    <AuthContext.Provider value={{signedIn, signin, signout, setUserEmail, email}}>
       {children}
     </AuthContext.Provider>
   );

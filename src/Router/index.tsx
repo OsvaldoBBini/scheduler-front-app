@@ -6,6 +6,7 @@ import { Register } from '../view/pages/Register'
 import { AuthLayout } from '../view/layouts/AuthLayout'
 import { ConfirmationLayout } from '../view/layouts/ConfirmationLayout'
 import { AccountValidation } from '../view/pages/AccountValidation'
+import { Dashboard } from '../view/pages/Dashboard'
 
 export function Router() {  
   return (
@@ -22,9 +23,9 @@ export function Router() {
           </Route>
         </Route>
         
-        {/* <Route element={<AuthGuard isPrivate/>}>
+        <Route element={<AuthGuard isPrivate/>}>
           <Route path='/' element={<Dashboard/>}/>
-        </Route> */}
+        </Route>
       
       </Routes>
     </BrowserRouter>

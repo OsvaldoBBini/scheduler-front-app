@@ -1,6 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { z } from "zod";
+import { ConfirmationAccountParams } from "../../../app/services/authService/confirmAccount";
+import { authService } from "../../../app/services/authService";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../app/hooks/useAuth";
 
 const schema = z.object({
   confirmationCode: z.string().min(6, 'O código deve conter 6 digitos')
@@ -14,6 +20,23 @@ export function useAccountValidation() {
     resolver: zodResolver(schema)
   });
 
-  return { register, errors }
+  const navigate = useNavigate();
+  const { email } = useAuth();
+
+  // const { mutateAsync, isLoading } = useMutation({
+  //   mutationKey: ['confirmation'],
+  //   mutationFn: async (data: ConfirmationAccountParams ) => { return authService.confirmAccount(data); }
+  // });
+
+  const handleSubmit = hookFormSubmit(async (data) => {
+    try {
+      // await mutateAsync({...data, email});
+      navigate('/confirmation')
+    } catch {
+      toast.error('Ocorreu um erro ao criar sua conta!!');
+    }
+  });
+
+  return { handleSubmit, register, errors }
 
 }

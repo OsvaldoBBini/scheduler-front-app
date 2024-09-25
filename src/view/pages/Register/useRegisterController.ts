@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authService } from "../../../app/services/authService";
 import { SignupParams } from "../../../app/services/authService/signup";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../app/hooks/useAuth";
 
 const schema = z.object({
   name: z.string().min(1,'Nome é obrigatório'),
@@ -26,6 +27,7 @@ export function useRegisterController() {
   });
 
   const navigate = useNavigate();
+  const { setUserEmail } = useAuth();
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['signup'],
@@ -34,6 +36,7 @@ export function useRegisterController() {
 
   const handleSubmit = hookFormSubmit(async (data) => {
     try {
+      setUserEmail(data.email);
       await mutateAsync(data);
       navigate('/confirmation')
     } catch {
