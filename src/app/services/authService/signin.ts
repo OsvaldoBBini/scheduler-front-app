@@ -5,7 +5,7 @@ export interface SigninParams {
   password: string;
 }
 
-interface SigninResponse { accessToken: string  }
+interface SigninResponse { accessToken: string, refreshToken: string  }
 
 export async function signin(params: SigninParams) {
   const { data } = await httpClient.post<SigninResponse>('/auth/signin', params);

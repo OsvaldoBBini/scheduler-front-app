@@ -1,9 +1,13 @@
 import { httpClient } from "../httpClient";
 
-interface MeResponse { name: string, email: string  }
+interface MeResponse {
+  Name: string;
+  Value: string
+}
+
 
 export async function me() {
-  const { data } = await httpClient.get<MeResponse>('/users/me');
+  const { data } = await httpClient.get<MeResponse[]>('/profile');
 
   return data;
 }
