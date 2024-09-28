@@ -25,8 +25,8 @@ export function Register () {
     <form action="" className="mt-[60px] flex flex-col gap-4" onSubmit={handleSubmit}>
       <Input 
         placeholder="Nome"
-        error={errors.name?.message} 
-        {...register('name')}/>
+        error={errors.firstName?.message} 
+        {...register('firstName')}/>
       
       <Input 
         type="email" 

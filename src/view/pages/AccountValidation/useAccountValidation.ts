@@ -33,7 +33,7 @@ export function useAccountValidation() {
       await mutateAsync({...data, email});
       navigate('/login')
     } catch {
-      toast.error('Ocorreu um erro ao criar sua conta!!');
+      toast.error('Ocorreu um erro ao validar sua conta!!');
     }
   });
 

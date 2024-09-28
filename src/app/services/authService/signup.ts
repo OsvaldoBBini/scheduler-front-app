@@ -1,7 +1,7 @@
 import { httpClient } from "../httpClient";
 
 export interface SignupParams {
-  name: string;
+  firstName: string;
   email: string;
   password: string;
 }

@@ -6,9 +6,6 @@ export function AuthLayout() {
       <div className="w-full max-w-[400px] px-8">
         <Outlet/>
       </div>
-      <p className="text-gray-700 text-center font-medium text-md mt-6 max-w-[200px]">  
-          Gerencie seus atendimentos de maneira dinâmica e fácil!
-      </p>
     </div>
   );
 }
