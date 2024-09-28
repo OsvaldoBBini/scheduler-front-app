@@ -2,11 +2,11 @@ import {Routes, Route, BrowserRouter } from 'react-router-dom'
 import { AuthGuard } from './AuthGuard'
 import { Login } from '../view/pages/Login'
 import { Register } from '../view/pages/Register'
-// import { Dashboard } from '../view/pages/Dashboard'
 import { AuthLayout } from '../view/layouts/AuthLayout'
 import { ConfirmationLayout } from '../view/layouts/ConfirmationLayout'
 import { AccountValidation } from '../view/pages/AccountValidation'
 import { Dashboard } from '../view/pages/Dashboard'
+import { ForgotPassword } from '../view/pages/ForgotPassword'
 
 export function Router() {  
   return (
@@ -17,11 +17,13 @@ export function Router() {
           <Route element={<AuthLayout/>}>
             <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Register/>}/>
+            <Route element={<ForgotPassword/>} path='/forgot'/>
           </Route>
           <Route element={<ConfirmationLayout/>}>
             <Route path='/confirmation' element={<AccountValidation/>}/>
           </Route>
         </Route>
+
         
         <Route element={<AuthGuard isPrivate/>}>
           <Route path='/' element={<Dashboard/>}/>

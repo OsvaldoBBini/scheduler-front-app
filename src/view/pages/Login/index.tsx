@@ -40,7 +40,7 @@ export function Login () {
           placeholder="Senha" 
           error={errors.password?.message}
           {...register("password")}/>
-        <a className="font-bold text-xs text-right text-gray-600" href="/reset">Esqueci minha senha</a>
+        <a className="font-bold text-xs text-right text-gray-600" href="/forgot">Esqueci minha senha</a>
       
         <Button type="submit" className="mt-2" isPending={isPending}>
           Entrar
