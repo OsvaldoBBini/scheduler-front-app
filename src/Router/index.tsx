@@ -7,6 +7,7 @@ import { ConfirmationLayout } from '../view/layouts/ConfirmationLayout'
 import { AccountValidation } from '../view/pages/AccountValidation'
 import { Dashboard } from '../view/pages/Dashboard'
 import { ForgotPassword } from '../view/pages/ForgotPassword'
+import { ResetPassword } from '../view/pages/ResetPassword'
 
 export function Router() {  
   return (
@@ -18,6 +19,7 @@ export function Router() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/register' element={<Register/>}/>
             <Route element={<ForgotPassword/>} path='/forgot'/>
+            <Route element={<ResetPassword/>} path='/reset'/>
           </Route>
           <Route element={<ConfirmationLayout/>}>
             <Route path='/confirmation' element={<AccountValidation/>}/>

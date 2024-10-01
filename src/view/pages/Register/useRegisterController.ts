@@ -12,7 +12,9 @@ import { useAuth } from "../../../app/hooks/useAuth";
 const schema = z.object({
   firstName: z.string().min(1,'Nome é obrigatório'),
   email: z.string().email('Informe um e-mail válido'),
-  password: z.string().min(8, 'Senha deve conter pelo menos 8 dígitos')
+  password: z.string().min(8, 'Senha deve conter pelo menos 8 dígitos').regex(/(?=.*[a-z])(?=.*[A-Z])/, {
+    message: "A senha deve possuir ao menos uma letra maíscula e uma minúscula",
+  })
 });
 
 type FormData = z.infer<typeof schema>;
