@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { userService } from "../services/usersService";
 import { httpClient } from "../services/httpClient";
 import toast from "react-hot-toast";
+import { MeResponse } from "../services/usersService/me";
 
 interface AuthContextValue {
   signedIn: boolean;
@@ -11,6 +12,7 @@ interface AuthContextValue {
   signout(): void;
   signin(accessToken: string): void
   setUserEmail(userEmail: string): void;
+  profileData: MeResponse | undefined;
 }
 
 export const AuthContext = createContext({} as AuthContextValue);
@@ -54,7 +56,7 @@ export function AuthProvider({ children }: {
     setSignedIn(false);
   }, []);
 
-  const { isError } = useQuery({
+  const { data: profileData, isError } = useQuery({
     queryKey: ['users', 'me'],
     queryFn: () => userService.me(),
     enabled: signedIn,
@@ -68,7 +70,7 @@ export function AuthProvider({ children }: {
   }, [isError, signout]);
 
   return (
-    <AuthContext.Provider value={{signedIn, signin, signout, setUserEmail, email}}>
+    <AuthContext.Provider value={{signedIn, signin, signout, setUserEmail, email, profileData}}>
       {children}
     </AuthContext.Provider>
   );

@@ -26,7 +26,6 @@ export function Router() {
           </Route>
         </Route>
 
-        
         <Route element={<AuthGuard isPrivate/>}>
           <Route path='/' element={<Dashboard/>}/>
         </Route>
