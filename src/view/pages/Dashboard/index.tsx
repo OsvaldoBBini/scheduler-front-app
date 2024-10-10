@@ -12,7 +12,7 @@ export function Dashboard() {
         <ProfileInfos/>
       </header>
 
-      <section>
+      <section className="flex justify-center">
         <DayFilter/>
       </section>
 
