@@ -29,6 +29,7 @@ const months = [
 
 export function DayFilter(): JSX.Element {
 
+  const [daySelection, setDaySelection] = useState<number>(() => new Date().getDay());
   const [monthSelection, setMonthSelection] = useState<number>(() => new Date().getMonth());
   const [yearSelection, setYearSelection] = useState<number>(() => new Date().getFullYear());
 
@@ -59,6 +60,9 @@ export function DayFilter(): JSX.Element {
     setMonthSelection(value);
   };
   
+  const handleDayChange = (currentSelection: number) => {
+    setDaySelection(currentSelection);
+  }
 
   return (
     <div className="flex flex-col p-2 w-11/12
@@ -110,7 +114,7 @@ export function DayFilter(): JSX.Element {
       dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
           {allDays.map((day: IDay) => 
             <li key={day.day}>
-              <Button className="flex flex-col justify-center items-center w-20 h-24 shadow-md">
+              <Button className={`flex flex-col justify-center items-center w-20 h-24 shadow-md ${day.day !== daySelection && 'bg-white text-gray-500 hover:text-white'}`} onClick={() => handleDayChange(day.day)}>
                 <small>{day.dayOfWeek}</small>
                 <span>{day.day}</span>
               </Button>

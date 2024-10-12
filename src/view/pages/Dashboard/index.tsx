@@ -1,14 +1,16 @@
 import { Plus } from "@phosphor-icons/react";
 import { ProfileInfos } from "./components/ProfileInfos";
 import { DayFilter } from "./components/DayFilter";
+import { RegisterForm } from "./components/RegisterForm";
 
 export function Dashboard() {
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-screen w-screen">
 
-      <header className="w-full flex justify-between items-center p-2 border-b-2 border-gray-200">
-        <span>Scheculer</span>
+      <RegisterForm/>
+
+      <header className="w-full flex justify-end items-center p-2">
         <ProfileInfos/>
       </header>
 
