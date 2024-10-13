@@ -12,6 +12,10 @@ interface IMonth {
   monthIndex: number
 }
 
+interface IYear {
+  year: number;
+}
+
 const months = [
   {month: 'Janeiro', monthIndex:0},
   {month: 'Fevereiro', monthIndex:1},
@@ -29,7 +33,7 @@ const months = [
 
 export function DayFilter(): JSX.Element {
 
-  const [daySelection, setDaySelection] = useState<number>(() => new Date().getDay());
+  const [daySelection, setDaySelection] = useState<number>(() => new Date().getDate());
   const [monthSelection, setMonthSelection] = useState<number>(() => new Date().getMonth());
   const [yearSelection, setYearSelection] = useState<number>(() => new Date().getFullYear());
 
@@ -49,6 +53,19 @@ export function DayFilter(): JSX.Element {
     return days;    
 
   },[monthSelection, yearSelection]);
+
+  const years = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const years = []
+
+    for (let year = currentYear; year <= currentYear + 4; year++) {
+      years.push({
+        year
+      })
+    }
+
+    return years
+  }, []);
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = Number(event.target.value)
@@ -94,9 +111,9 @@ export function DayFilter(): JSX.Element {
           defaultValue={yearSelection}
           onChange={handleYearChange}>
           <>
-            <option value={2024}>2024</option>
-            <option value={2025}>2025</option>
-            <option value={2026}>2026</option>
+            {years.map((year: IYear) => 
+              <option key={year.year} value={year.year}>{year.year}</option>
+            )}
           </>
         </Select>
 
