@@ -21,6 +21,10 @@ export function RegisterForm(): JSX.Element {
           <Input className="border-0 border-b-[1px] rounded-none" 
             name="Telefone"
             placeholder="Telefone"/>
+          <Input className="border-0 border-b-[1px] rounded-none" 
+            name="Data"
+            type="date"
+            placeholder="Data do atendimento"/>
         </form>
       </form>
       </div>
