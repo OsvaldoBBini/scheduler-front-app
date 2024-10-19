@@ -38,7 +38,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
     setModalStatus(prevState => !prevState);
   }, []);
 
-  const { data: typesRecords } = useQuery({
+  const { data: typesRecords, refetch: refetchCategories } = useQuery({
     queryKey: ['showCategory'],
     queryFn: () => appointmentTypeService.show({userId: profileData!.sub}),
     enabled: isOpen
@@ -47,7 +47,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
   return (
     <motion.div className={`h-full w-full bg-black fixed left-0 top-0 z-10 bg-opacity-75`} animate={isOpen ? show : hide}>
       <div className="flex items-center justify-center w-full h-full">
-        <div className="bg-white md:w-1/3 w-4/5 sm:h-2/4 h-2.5/5 rounded-lg p-3">
+        <div className="bg-white md:w-1/3 w-4/5 sm:h-2/4 h-3/5 rounded-lg p-3">
           <header className="flex justify-between">
             <h1 className="text-xl">Gerenciar Categoria</h1>
             <button onClick={onEditCategory}>
@@ -59,7 +59,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
 
           <section className="mt-4">
               <span>Tipos já cadastrados:</span>
-              <ul className="flex flex-col gap-y-3 mt-4 p-3 max-h-56 overflow-auto
+              <ul className="flex flex-col gap-y-3 mt-4 p-3 sm:max-h-56 max-h-72 overflow-auto
               [&::-webkit-scrollbar]:w-2
             [&::-webkit-scrollbar-track]:bg-gray-100
               [&::-webkit-scrollbar-track]:rounded-full
@@ -92,7 +92,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
         </div>
       </div>
 
-      <ReactPortal containerID="modal" children={<CreateCategoryModal isOpen={modalStatus} onNewCategory={handleModalStatus} defaultValues={defaultValues}/>}/>
+      <ReactPortal containerID="modal" children={<CreateCategoryModal isOpen={modalStatus} onNewCategory={handleModalStatus} defaultValues={defaultValues} refetchCategories={refetchCategories}/>}/>
       
     </motion.div>
   )
