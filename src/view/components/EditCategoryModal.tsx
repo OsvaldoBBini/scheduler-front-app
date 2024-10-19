@@ -40,7 +40,8 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
 
   const { data: typesRecords } = useQuery({
     queryKey: ['showCategory'],
-    queryFn: () => appointmentTypeService.show({userId: profileData!.sub})
+    queryFn: () => appointmentTypeService.show({userId: profileData!.sub}),
+    enabled: isOpen
   });
 
   return (
