@@ -1,9 +1,7 @@
-import { X } from "@phosphor-icons/react";
 import { Input } from "../../../../components/Input";
 import { Button } from "../../../../components/Button";
-import { motion } from "framer-motion";
 import { Select } from "../../../../components/Select";
-import { hide, show } from "../../../../../app/utils/style";
+import { ModalContainer } from "../../../../components/Modal";
 
 interface IRegisterForm {
   isOpen: boolean;
@@ -13,18 +11,7 @@ interface IRegisterForm {
 export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
 
   return (
-    <motion.div className="h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0" animate={isOpen ? show : hide}>
-
-      <div className="flex flex-col justify-end items-end h-full">
-        <div className="bg-white h-4/5 p-4 w-full rounded-t-lg">
-      
-          <header className="flex justify-between pb-3 ">
-            <h1 className="text-xl">Novo Atendimento</h1>
-            <button onClick={onRegister}>
-              <X size={28}/>
-            </button>
-          </header>
-
+    <ModalContainer isOpen={isOpen} onModal={onRegister} title={'Novo Atendimento'}>
           <form>
             <div className="flex flex-col gap-y-4 mt-4">
               <section>
@@ -67,8 +54,6 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
               </div>
             </div>
           </form>
-        </div>
-      </div>
-    </motion.div>
+    </ModalContainer>
   )
 }

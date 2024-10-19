@@ -1,5 +1,3 @@
- import { X } from "@phosphor-icons/react";
-import { motion } from "framer-motion";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import { useAuth } from "../../app/hooks/useAuth";
@@ -10,9 +8,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { hide, show } from "../../app/utils/style";
 import { ICategory } from "./EditCategoryModal";
 import { UpdateAppointmentType } from "../../app/services/appointmentTypeService/updateAppointmentType";
+import { ModalContainer } from "./Modal";
 
 const schema = z.object({
   appointmentTypeName: z.string().min(1, 'Informe um tipo válido'),
@@ -67,18 +65,7 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
   });
 
   return (
-    <motion.div className={`h-full w-full ${defaultValues ? 'bg-transparent' : 'bg-black'} fixed left-0 top-0 z-10 bg-opacity-75`} animate={isOpen ? show : hide}>
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="bg-white md:w-1/3 w-4/5 sm:h-2/4 h-3/5 rounded-lg p-3">
-          <header className="flex justify-between">
-            <h1 className="text-xl">
-              { defaultValues ? 'Editar Categoria' : 'Criar Categoria'}
-            </h1>
-            <button onClick={onNewCategory}>
-              <X size={28}/>
-            </button>
-          </header>
-
+        <ModalContainer isOpen={isOpen} onModal={onNewCategory} title={defaultValues ? 'Editar Categoria' : 'Criar Categoria'} className={`${defaultValues ? 'bg-transparent' : 'bg-black'}`}>
           <section className="flex flex-col justify-center mt-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-y-3">
               <Input {...register('appointmentTypeName')} name="appointmentTypeName" defaultValue={defaultValues?.appointmentTypeName} placeholder="Nome da Catogoria"
@@ -90,9 +77,6 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
               </Button>
             </form>
           </section>
-
-        </div>
-      </div>
-    </motion.div>
+        </ModalContainer>
   )
 }
