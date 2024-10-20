@@ -1,11 +1,9 @@
 import { Plus } from "@phosphor-icons/react";
 import { ProfileInfos } from "./components/ProfileInfos";
 import { DayFilter } from "./components/DayFilter";
-import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import { ReactPortal } from "../../components/ReactPortal";
 
-import { hide, show } from "../../../app/utils/style";
 import { CreateCategoryModal } from "../../components/CreateCategoryModal";
 import { RegisterForm } from "./components/RegisterForm";
 import { EditCategoryModal } from "../../components/EditCategoryModal";
@@ -44,13 +42,13 @@ export function Dashboard() {
           <Plus size={35} fill="#000" className={`${isVisible && 'rotate-45'} transition-all`}/>
         </button>
 
-        <motion.div className="absolute -top-36 right-0" animate={isVisible ? show : hide}>
+        <div className={`absolute -top-36 right-0 ${isVisible ? 'block' : 'hidden'}`}>
           <div className="text-right w-44">
             <button onClick={handleNewCategory}  className="mb-3 shadow-md py-1 px-2 rounded-lg">Nova Categoria</button>
             <button className="mb-3 shadow-md py-1 px-2 rounded-lg" onClick={handleEditCategory}>Editar Categoria</button>
             <button onClick={handleRegister}  className="shadow-md py-1 px-2 rounded-lg">Novo Atendimento</button>
           </div>
-        </motion.div>
+        </div>
       </footer>
 
       <ReactPortal containerID="create-category" children={<CreateCategoryModal isOpen={createNewCategory} onNewCategory={handleNewCategory}/>}/>

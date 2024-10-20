@@ -1,19 +1,6 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuth } from "../../../../app/hooks/useAuth";
 import { UserCircle, SignOut } from "@phosphor-icons/react";
-
-const show = {
-  opacity: 1,
-  display: "block"
-};
-
-const hide = {
-  opacity: 0,
-  transitionEnd: {
-    display: "none"
-  }
-};
 
 export function ProfileInfos(): JSX.Element {
   
@@ -22,7 +9,7 @@ export function ProfileInfos(): JSX.Element {
   
   return (
     <div className="relative">
-      <motion.div className='p-4 w-48 absolute bg-white top-10 right-0 rounded-2xl shadow-md' animate={isVisible ? show : hide} >
+      <div className={`p-4 w-48 absolute bg-white top-10 right-0 rounded-2xl shadow-md ${isVisible ? 'block' : 'hidden'}`}>
         <div className="flex flex-col gap-y-3">
           {profileData && 
           
@@ -32,17 +19,17 @@ export function ProfileInfos(): JSX.Element {
           </div>
           }
 
-          <button className="flex items-center justify-center gap-x-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-all" onClick={signout}> 
+          <button className="flex items-center justify-center gap-x-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-2xl " onClick={signout}> 
               <SignOut size={25} weight="thin" />
             <span>Logout</span>
           </button>
         
         </div>
-      </motion.div>
+      </div>
 
-      <motion.button className="flex" onClick={() => setIsVisible(!isVisible)}>
+      <button className="flex" onClick={() => setIsVisible(!isVisible)}>
         <UserCircle size={35} weight="thin"/>
-      </motion.button>
+      </button>
     </div>
   )
 }
