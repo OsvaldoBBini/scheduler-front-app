@@ -1,6 +1,6 @@
 import { httpClient } from "../httpClient";
 
-export interface ShowAppointmentType {
+export interface ShowAppointmentCategory {
   userId: string;
 }
 
@@ -25,7 +25,7 @@ const mapper = (data: IInputCategory[]): ICategory[] => data.map((categorie: IIn
   appointmentTypePrice: categorie.appointmentTypePrice
 }))
 
-export async function showAppointmentType(params: ShowAppointmentType) {
+export async function showAppointmentCategory(params: ShowAppointmentCategory) {
   const { data } = await httpClient.get(`/appointments_type/${params.userId}`);
 
   return mapper(data.Items);

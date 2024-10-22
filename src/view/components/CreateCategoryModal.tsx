@@ -2,15 +2,15 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import { useAuth } from "../../app/hooks/useAuth";
 import { QueryObserverResult, RefetchOptions, useMutation } from "@tanstack/react-query";
-import { appointmentTypeService } from "../../app/services/appointmentTypeService";
-import { CreateAppointmentType } from "../../app/services/appointmentTypeService/createAppointmentType";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { UpdateAppointmentType } from "../../app/services/appointmentTypeService/updateAppointmentType";
 import { ModalContainer } from "./Modal";
-import { ICategory } from "../../app/services/appointmentTypeService/showAppointmentType";
+import { ICategory } from "../../app/services/appointmentCategoryService/showAppointmentCategory";
+import { appointmentCategoryService } from "../../app/services/appointmentCategoryService";
+import { CreateAppointmentCategory } from "../../app/services/appointmentCategoryService/createAppointmentCategory";
+import { UpdateAppointmentCategory } from "../../app/services/appointmentCategoryService/updateAppointmentCategory";
 
 const schema = z.object({
   appointmentTypeName: z.string().min(1, 'Informe um tipo válido'),
@@ -36,19 +36,19 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
     defaultValues: defaultValues ? { appointmentTypeName: defaultValues.appointmentTypeName, appointmentTypePrice: defaultValues.appointmentTypePrice } : {appointmentTypeName: '', appointmentTypePrice: ''}
   });
 
-  const { mutateAsync: createType, isPending: isCreationPending } = useMutation({
-    mutationKey: ['createType'],
-    mutationFn: async (data: CreateAppointmentType ) => { return appointmentTypeService.create(data); }
+  const { mutateAsync: createCategory, isPending: isCreationPending } = useMutation({
+    mutationKey: ['createCategory'],
+    mutationFn: async (data: CreateAppointmentCategory ) => { return appointmentCategoryService.create(data); }
   });
 
-  const { mutateAsync: updateType, isPending: isUpdatePending } = useMutation({
-    mutationKey: ['updateType'],
-    mutationFn: async (data: UpdateAppointmentType ) => { return appointmentTypeService.update(data); }
+  const { mutateAsync: updateCategory, isPending: isUpdatePending } = useMutation({
+    mutationKey: ['updateCategory'],
+    mutationFn: async (data: UpdateAppointmentCategory ) => { return appointmentCategoryService.update(data); }
   });
 
   const handleSubmit = hookFormSubmit(async (data) => {
     if (defaultValues && refetchCategories) {
-      await updateType({...data, userId: profileData!.sub, appointmentTypeId: defaultValues.appointmentTypeId})
+      await updateCategory({...data, userId: profileData!.sub, appointmentTypeId: defaultValues.appointmentTypeId})
       .then(() => {
         toast.success('Categoria atualizada com sucesso!')
         refetchCategories();
@@ -57,7 +57,7 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
       .catch(() => toast.error('Não foi possível atualizar a categoria'))
     }
     else {
-      await createType({...data, userId: profileData!.sub})
+      await createCategory({...data, userId: profileData!.sub})
         .then(() => toast.success('Categoria cadastrado com sucesso!!'))
         .catch(() => {
           toast.error('Não foi possivel cadastrar seu novo tipo!')}

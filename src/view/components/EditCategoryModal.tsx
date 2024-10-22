@@ -2,14 +2,14 @@ import { PencilSimple } from "@phosphor-icons/react";
 import { Button } from "./Button";
 import { useAuth } from "../../app/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
-import { appointmentTypeService } from "../../app/services/appointmentTypeService";
+import { appointmentCategoryService } from "../../app/services/appointmentCategoryService";
 import { Card } from "./Card";
 import { ReactPortal } from "./ReactPortal";
 import { CreateCategoryModal } from "./CreateCategoryModal";
 import { useCallback, useState } from "react";
 import { ModalContainer } from "./Modal";
 import { Spinner } from "./Spinner";
-import { ICategory } from "../../app/services/appointmentTypeService/showAppointmentType";
+import { ICategory } from "../../app/services/appointmentCategoryService/showAppointmentCategory";
 
 
 interface ICreateCategoryModal {
@@ -34,7 +34,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
 
   const { data: typesRecords, refetch: refetchCategories, isPending: isPendingCategories } = useQuery({
     queryKey: ['showCategory'],
-    queryFn: () => appointmentTypeService.show({userId: profileData!.sub}),
+    queryFn: () => appointmentCategoryService.show({userId: profileData!.sub}),
     enabled: isOpen
   });
 
