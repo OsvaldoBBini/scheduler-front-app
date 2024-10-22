@@ -9,7 +9,7 @@ import { CreateCategoryModal } from "./CreateCategoryModal";
 import { useCallback, useState } from "react";
 import { ModalContainer } from "./Modal";
 import { Spinner } from "./Spinner";
-import { ICategorie } from "../../app/services/appointmentTypeService/showAppointmentType";
+import { ICategory } from "../../app/services/appointmentTypeService/showAppointmentType";
 
 
 interface ICreateCategoryModal {
@@ -22,9 +22,9 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
   const { profileData } = useAuth();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [defaultValues, setDefaultValues] = useState<ICategorie | null>(null);
+  const [defaultValues, setDefaultValues] = useState<ICategory | null>(null);
 
-  const handleDefaultValues = ((record: ICategorie) => {
+  const handleDefaultValues = ((record: ICategory) => {
     setDefaultValues(record);
   });
 
@@ -57,7 +57,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
                 dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
                   ">
-                    {typesRecords && typesRecords.map((record: ICategorie) => 
+                    {typesRecords && typesRecords.map((record: ICategory) => 
                       <li key={record.appointmentTypeId}>
                         <Card>
                           <>

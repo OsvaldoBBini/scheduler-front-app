@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { UpdateAppointmentType } from "../../app/services/appointmentTypeService/updateAppointmentType";
 import { ModalContainer } from "./Modal";
-import { ICategorie } from "../../app/services/appointmentTypeService/showAppointmentType";
+import { ICategory } from "../../app/services/appointmentTypeService/showAppointmentType";
 
 const schema = z.object({
   appointmentTypeName: z.string().min(1, 'Informe um tipo válido'),
@@ -22,7 +22,7 @@ type FormData = z.infer<typeof schema>
 interface ICreateCategoryModal {
   onNewCategory: () => void;
   isOpen: boolean;
-  defaultValues?: ICategorie | null,
+  defaultValues?: ICategory | null,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   refetchCategories?: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
 }
