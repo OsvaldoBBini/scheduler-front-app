@@ -8,9 +8,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { ICategory } from "./EditCategoryModal";
 import { UpdateAppointmentType } from "../../app/services/appointmentTypeService/updateAppointmentType";
 import { ModalContainer } from "./Modal";
+import { ICategorie } from "../../app/services/appointmentTypeService/showAppointmentType";
 
 const schema = z.object({
   appointmentTypeName: z.string().min(1, 'Informe um tipo válido'),
@@ -22,7 +22,7 @@ type FormData = z.infer<typeof schema>
 interface ICreateCategoryModal {
   onNewCategory: () => void;
   isOpen: boolean;
-  defaultValues?: ICategory | null,
+  defaultValues?: ICategorie | null,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   refetchCategories?: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
 }
@@ -32,7 +32,8 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
   const { profileData } = useAuth();
 
   const { handleSubmit: hookFormSubmit, register, formState: {errors} } = useForm<FormData>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: defaultValues ? { appointmentTypeName: defaultValues.appointmentTypeName, appointmentTypePrice: defaultValues.appointmentTypePrice } : {appointmentTypeName: '', appointmentTypePrice: ''}
   });
 
   const { mutateAsync: createType, isPending: isCreationPending } = useMutation({
@@ -47,7 +48,7 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
 
   const handleSubmit = hookFormSubmit(async (data) => {
     if (defaultValues && refetchCategories) {
-      await updateType({...data, userId: profileData!.sub, appointmentTypeId: defaultValues.SK.split("#")[1]})
+      await updateType({...data, userId: profileData!.sub, appointmentTypeId: defaultValues.appointmentTypeId})
       .then(() => {
         toast.success('Categoria atualizada com sucesso!')
         refetchCategories();

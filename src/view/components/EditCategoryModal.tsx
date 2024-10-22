@@ -9,6 +9,7 @@ import { CreateCategoryModal } from "./CreateCategoryModal";
 import { useCallback, useState } from "react";
 import { ModalContainer } from "./Modal";
 import { Spinner } from "./Spinner";
+import { ICategorie } from "../../app/services/appointmentTypeService/showAppointmentType";
 
 
 interface ICreateCategoryModal {
@@ -16,21 +17,14 @@ interface ICreateCategoryModal {
   isOpen: boolean;
 }
 
-export interface ICategory {
-  PK: string,
-  SK: string;
-  appointmentTypeName: string;
-  appointmentTypePrice: string;
-}
-
 export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal) {
 
   const { profileData } = useAuth();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [defaultValues, setDefaultValues] = useState<ICategory | null>(null);
+  const [defaultValues, setDefaultValues] = useState<ICategorie | null>(null);
 
-  const handleDefaultValues = ((record: ICategory) => {
+  const handleDefaultValues = ((record: ICategorie) => {
     setDefaultValues(record);
   });
 
@@ -63,8 +57,8 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
                 dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
                   ">
-                    {typesRecords && typesRecords.Items.map((record: ICategory) => 
-                      <li key={record.SK}>
+                    {typesRecords && typesRecords.map((record: ICategorie) => 
+                      <li key={record.appointmentTypeId}>
                         <Card>
                           <>
                             <div className="flex flex-col">
