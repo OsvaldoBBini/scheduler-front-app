@@ -69,13 +69,17 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
         <ModalContainer isOpen={isOpen} onModal={onNewCategory} title={defaultValues ? 'Editar Categoria' : 'Criar Categoria'} className={`${defaultValues ? 'bg-transparent' : 'bg-black'}`}>
           <section className="flex flex-col justify-center mt-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-y-3">
-              <Input 
-              {...register('appointmentTypeName')} id="appointmentTypeName" defaultValue={defaultValues?.appointmentTypeName} placeholder="Nome da Catogoria"
+              <Input
+              id="appointmentTypeName" 
+              {...register('appointmentTypeName')} defaultValue={defaultValues?.appointmentTypeName} placeholder="Nome da Catogoria"
               error={errors.appointmentTypeName?.message}/>
+              
               <Input 
-              {...register('appointmentTypePrice')} id="appointmentTypePrice"
+              id="appointmentTypePrice"
+              {...register('appointmentTypePrice')} 
               defaultValue={defaultValues?.appointmentTypePrice} placeholder="Preço Cobrado"
               error={errors.appointmentTypePrice?.message}/>
+              
               <Button type="submit" isPending={isCreationPending || isUpdatePending} disabled={isCreationPending || isUpdatePending}>
                 {defaultValues ? 'Salvar' : 'Cadastrar'}
               </Button>

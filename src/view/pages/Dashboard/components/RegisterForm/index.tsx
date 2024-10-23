@@ -5,10 +5,13 @@ import { Select } from "../../../../components/Select";
 import { appointmentCategoryService } from "../../../../../app/services/appointmentCategoryService";
 import { useAuth } from "../../../../../app/hooks/useAuth";
 import { ICategory } from "../../../../../app/services/appointmentCategoryService/showAppointmentCategory";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { CreateAppointment } from "../../../../../app/services/appointmentsService/createAppointmentCategory";
+import { appointmentService } from "../../../../../app/services/appointmentsService";
+import toast from "react-hot-toast";
 
 interface IRegisterForm {
   isOpen: boolean;
@@ -41,14 +44,43 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
     resolver: zodResolver(schema),
   });
 
+  const { mutateAsync: createAppointment, isPending: isCreationPending } = useMutation({
+    mutationKey: ['createAppointment'],
+    mutationFn: async (data: CreateAppointment ) => { return appointmentService.create(data); }
+  });
+
   const handleSubmit = hookFormSubmit(async (data) => {
-    console.log(data);
-  }, (data) => console.log(data));
+
+    const date = data.date.split('-')
+    const category = JSON.parse(data.category);
+    const startsAt = data.startAt.split(':');
+    const endsAt = data.endsAt.split(':');
+    
+    const newAppointment = {
+      userId: profileData!.sub,
+      appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
+      name: data.name,
+      phoneNumber: data.phoneNumber, 
+      startsAt: String(Number(startsAt[0])*60 + Number(startsAt[1])),
+      endsAt: String(Number(endsAt[0])*60 + Number(endsAt[1])),
+      appointmentType: category[0],
+      appointmentPayment: category[1]
+    }
+
+    await createAppointment(newAppointment)
+      .then(() => {
+        toast.success('Atendimento agendado com sucesso!')
+      })
+      .catch(() => {
+        toast.error('Não foi possível agendar seu atendimento')
+      });
+
+  });
 
   return (
     <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'}`}>
-      <div className="flex flex-col justify-end items-end h-full">
-        <div className="bg-white h-4/5 p-4 w-full rounded-t-lg">
+      <div className="flex sm:items-center sm:justify-center flex-col justify-end items-end h-full">
+        <div className="bg-white sm:w-2/5 h-4/5 p-4 w-full rounded-t-lg sm: rounded-lg">
       
           <header className="flex justify-between pb-3 ">
             <h1 className="text-xl">Novo Atendimento</h1>
@@ -123,7 +155,7 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                 </div>
               </section>
               <div className="flex w-full justify-end mt-5">
-                <Button>Registrar</Button>
+                <Button isPending={isCreationPending}>Registrar</Button>
               </div>
             </div>
           </form>
