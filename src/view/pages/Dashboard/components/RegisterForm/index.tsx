@@ -53,16 +53,14 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
 
     const date = data.date.split('-')
     const category = JSON.parse(data.category);
-    const startsAt = data.startAt.split(':');
-    const endsAt = data.endsAt.split(':');
     
     const newAppointment = {
       userId: profileData!.sub,
       appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
       name: data.name,
       phoneNumber: data.phoneNumber, 
-      startsAt: String(Number(startsAt[0])*60 + Number(startsAt[1])),
-      endsAt: String(Number(endsAt[0])*60 + Number(endsAt[1])),
+      startsAt: data.startAt,
+      endsAt: data.endsAt,
       appointmentType: category[0],
       appointmentPayment: category[1]
     }
