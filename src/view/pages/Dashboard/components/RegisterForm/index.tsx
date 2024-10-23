@@ -2,13 +2,48 @@ import { X } from "@phosphor-icons/react";
 import { Input } from "../../../../components/Input";
 import { Button } from "../../../../components/Button";
 import { Select } from "../../../../components/Select";
+import { appointmentCategoryService } from "../../../../../app/services/appointmentCategoryService";
+import { useAuth } from "../../../../../app/hooks/useAuth";
+import { ICategory } from "../../../../../app/services/appointmentCategoryService/showAppointmentCategory";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 interface IRegisterForm {
   isOpen: boolean;
   onRegister: () => void;
 }
 
+const schema = z.object({
+  name: z.string().min(1, 'Informe um nome válido'),
+  phoneNumber: z.string().regex(/^55\d{9,10}$/, 'Informe um número válido'),
+  date: z.string().min(1, 'Informe uma data válida'),
+  startAt: z.string().min(1, 'Informe o horário de início'),
+  endsAt: z.string().min(1, 'Informe o horário de fim'),
+  category: z.string().min(1, 'Informe uma categoria'),
+})
+
+type FormData = z.infer<typeof schema>
+
+
 export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
+
+  const { profileData } = useAuth();
+
+  const { data: categories } = useQuery({
+    queryKey: ['showCategory'],
+    queryFn: () => appointmentCategoryService.show({userId: profileData!.sub}),
+    enabled: isOpen
+  });
+
+  const { handleSubmit: hookFormSubmit, register, formState: {errors} } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const handleSubmit = hookFormSubmit(async (data) => {
+    console.log(data);
+  }, (data) => console.log(data));
 
   return (
     <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'}`}>
@@ -22,40 +57,68 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
             </button>
           </header>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-y-4 mt-4">
               <section>
-                <Input 
-                  name="Nome"
-                  placeholder="Nome"/>
+                <Input
+                  {...register('name')}
+                  id="name"
+                  placeholder="Nome"
+                  error={errors.name?.message}
+                  />
               </section>
               <section>
                 <Input
-                  name="Telefone"
-                  placeholder="Telefone"/>
+                  {...register('phoneNumber')}
+                  id='phoneNumber'
+                  placeholder="Telefone"
+                  error={errors.phoneNumber?.message}
+                  />
               </section>
               <section>
                 <Input
-                  name="Data"
+                  {...register('date')}
+                  id="date"
                   type="date"
-                  placeholder="Data do atendimento"/>
+                  placeholder="Data do atendimento"
+                  error={errors.date?.message}
+                  />
               </section>
               <section className="flex flex-col">
                 <label className="px-3 text-gray-700">Horário</label>
                 <div className="flex justify-between w-full gap-x-4">
                   <div className="w-full">
-                    <Input type='time' name="startAt" placeholder="Incío"/>
+                    <Input 
+                    {...register('startAt')}
+                    id='startAt' 
+                    type='time' 
+                    placeholder="Incío"
+                    error={errors.startAt?.message}
+                    />
                   </div>
                   <div className="w-full">
-                    <Input type='time' name="endsAt" placeholder="Fim" />
+                    <Input 
+                    {...register('endsAt')} 
+                    id='endsAt'
+                    type='time' 
+                    placeholder="Fim" 
+                    error={errors.endsAt?.message}
+                    />
                   </div>
                 </div>
               </section>
               <section className="flex w-full gap-x-3 items-end">
                 <div className="w-full">
                   <label className="px-3 text-gray-700">Categoria do atendimento</label>
-                  <Select className='bg-white rounded-lg border border-gray-500 p-3 h-[52px] text-gray-800 peer focus:border-gray-800'>
-                    <option value={'oi'} className="text-base">Oi</option>
+                  <Select className='bg-white rounded-lg border border-gray-500 p-3 h-[52px] text-gray-800 peer focus:border-gray-800' 
+                    {...register('category')}
+                    id='category'
+                    error={errors.category?.message}>
+                    <>
+                      {categories && categories.map((record: ICategory) => 
+                      <option key={record.appointmentTypeId} value={JSON.stringify([record.appointmentTypeName, record.appointmentTypePrice])}>{record.appointmentTypeName}</option>
+                      )}
+                    </>
                   </Select>
                 </div>
               </section>
