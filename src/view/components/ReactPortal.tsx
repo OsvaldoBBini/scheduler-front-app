@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 
 interface IReactPortal {
   containerID?: string,
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 export function ReactPortal({ containerID = 'portal-root', children }: IReactPortal): JSX.Element {

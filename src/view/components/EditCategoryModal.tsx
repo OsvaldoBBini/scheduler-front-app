@@ -60,7 +60,6 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
                     {typesRecords && typesRecords.map((record: ICategory) => 
                       <li key={record.appointmentTypeId}>
                         <Card>
-                          <>
                             <div className="flex flex-col">
                               <span>{record.appointmentTypeName}</span>
                               <span className="ml-3 text-green-700">R$ {record.appointmentTypePrice}</span>
@@ -71,7 +70,6 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
                             }}>
                               <PencilSimple size={25}/>
                             </Button>
-                          </>
                         </Card>
                       </li>
                     )}

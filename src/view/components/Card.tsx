@@ -1,5 +1,5 @@
 interface ICard {
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 export function Card({children}: ICard): JSX.Element {

@@ -6,7 +6,7 @@ interface IModal extends ComponentProps<'div'>{
   isOpen: boolean;
   onModal: () => void;
   title: string;
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 // ${defaultValues ? 'bg-transparent' : 'bg-black'}
