@@ -1,6 +1,7 @@
-import { createAppointment } from "./createAppointmentCategory";
-
+import { createAppointment } from "./createAppointment";
+import { showAppointment } from "./showAppointments";
 
 export const appointmentService = {
-  create: createAppointment
+  create: createAppointment,
+  show: showAppointment
 }

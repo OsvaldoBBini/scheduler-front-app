@@ -37,7 +37,7 @@ export function DateFiltersProvider({ children }: {
   const [monthSelection, setMonthSelection] = useState<number>(() => new Date().getMonth());
   const [yearSelection, setYearSelection] = useState<number>(() => new Date().getFullYear());
 
-  const searchDate = useMemo(() => `${daySelection}-${monthSelection}-${yearSelection}`,[daySelection, monthSelection, yearSelection]);
+  const searchDate = useMemo(() => `${daySelection}-${monthSelection+1}-${yearSelection}`,[daySelection, monthSelection, yearSelection]);
 
   const months = useMemo(() => [
     {month: 'Janeiro', monthIndex:0},

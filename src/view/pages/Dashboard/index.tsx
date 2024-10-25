@@ -8,6 +8,7 @@ import { CreateCategoryModal } from "../../components/CreateCategoryModal";
 import { RegisterForm } from "./components/RegisterForm";
 import { EditCategoryModal } from "../../components/EditCategoryModal";
 import { DateFiltersProvider } from "../../../app/contexts/DateFiltersContext";
+import { AppointmentView } from "./components/AppoitmentsView";
 
 export function Dashboard() {
 
@@ -37,6 +38,10 @@ export function Dashboard() {
 
         <section className="flex justify-center">
           <DayFilter/>
+        </section>
+
+        <section className="flex justify-center">
+          <AppointmentView/>
         </section>
 
         <footer className="fixed bottom-10 right-10">
