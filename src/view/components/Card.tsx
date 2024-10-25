@@ -2,7 +2,7 @@ import { cn } from "../../lib/utils";
 
 interface ICard {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 }
 
 export function Card({children, className}: ICard): JSX.Element {
