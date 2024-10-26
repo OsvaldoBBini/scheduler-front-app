@@ -5,17 +5,22 @@ import { Select } from "../../../../components/Select";
 import { appointmentCategoryService } from "../../../../../app/services/appointmentCategoryService";
 import { useAuth } from "../../../../../app/hooks/useAuth";
 import { ICategory } from "../../../../../app/services/appointmentCategoryService/showAppointmentCategory";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryObserverResult, RefetchOptions, useMutation, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { CreateAppointment } from "../../../../../app/services/appointmentsService/createAppointmentCategory";
 import { appointmentService } from "../../../../../app/services/appointmentsService";
 import toast from "react-hot-toast";
+import { CreateAppointment } from "../../../../../app/services/appointmentsService/createAppointment";
+import { IAppointment } from "../../../../../app/services/appointmentsService/showAppointments";
+import { useEffect } from "react";
 
 interface IRegisterForm {
   isOpen: boolean;
   onRegister: () => void;
+  defaultValues?: IAppointment | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  refetchAppointments?: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
 }
 
 const schema = z.object({
@@ -30,7 +35,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 
-export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
+export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm): JSX.Element {
 
   const { profileData } = useAuth();
 
@@ -40,9 +45,16 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
     enabled: isOpen
   });
 
-  const { handleSubmit: hookFormSubmit, register, formState: {errors} } = useForm<FormData>({
+  const { handleSubmit: hookFormSubmit, register, formState: {errors}, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: defaultValues ?? {}
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   const { mutateAsync: createAppointment, isPending: isCreationPending } = useMutation({
     mutationKey: ['createAppointment'],
@@ -82,7 +94,10 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
       
           <header className="flex justify-between pb-3 ">
             <h1 className="text-xl">Novo Atendimento</h1>
-            <button onClick={onRegister}>
+            <button onClick={() => {
+              onRegister()
+              reset()
+            }}>
               <X size={28}/>
             </button>
           </header>
@@ -94,6 +109,7 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                   {...register('name')}
                   id="name"
                   placeholder="Nome"
+                  defaultValue={defaultValues ?  defaultValues.name : ''}
                   error={errors.name?.message}
                   />
               </section>
@@ -102,6 +118,7 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                   {...register('phoneNumber')}
                   id='phoneNumber'
                   placeholder="Telefone"
+                  defaultValue={defaultValues ? defaultValues.phoneNumber : ''}
                   error={errors.phoneNumber?.message}
                   />
               </section>
@@ -123,6 +140,7 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                     id='startAt' 
                     type='time' 
                     placeholder="Incío"
+                    defaultValue={defaultValues? defaultValues.startsAt : ''}
                     error={errors.startAt?.message}
                     />
                   </div>
@@ -132,6 +150,7 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                     id='endsAt'
                     type='time' 
                     placeholder="Fim" 
+                    defaultValue={defaultValues? defaultValues.endsAt : ''}
                     error={errors.endsAt?.message}
                     />
                   </div>
@@ -143,7 +162,8 @@ export function RegisterForm({isOpen, onRegister}: IRegisterForm): JSX.Element {
                   <Select className='bg-white rounded-lg border border-gray-500 p-3 h-[52px] text-gray-800 peer focus:border-gray-800' 
                     {...register('category')}
                     id='category'
-                    error={errors.category?.message}>
+                    error={errors.category?.message}
+                    defaultValue={defaultValues ? JSON.stringify([defaultValues.appointmentType, defaultValues.appointmentPayment]) : ''}>
                     <>
                       {categories && categories.map((record: ICategory) => 
                       <option key={record.appointmentTypeId} value={JSON.stringify([record.appointmentTypeName, record.appointmentTypePrice])}>{record.appointmentTypeName}</option>

@@ -11,6 +11,7 @@ import { ICategory } from "../../app/services/appointmentCategoryService/showApp
 import { appointmentCategoryService } from "../../app/services/appointmentCategoryService";
 import { CreateAppointmentCategory } from "../../app/services/appointmentCategoryService/createAppointmentCategory";
 import { UpdateAppointmentCategory } from "../../app/services/appointmentCategoryService/updateAppointmentCategory";
+import { useEffect } from "react";
 
 const schema = z.object({
   appointmentTypeName: z.string().min(1, 'Informe um tipo válido'),
@@ -22,7 +23,7 @@ type FormData = z.infer<typeof schema>
 interface ICreateCategoryModal {
   onNewCategory: () => void;
   isOpen: boolean;
-  defaultValues?: ICategory | null,
+  defaultValues?: ICategory | undefined,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   refetchCategories?: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
 }
@@ -31,10 +32,16 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
 
   const { profileData } = useAuth();
 
-  const { handleSubmit: hookFormSubmit, register, formState: {errors} } = useForm<FormData>({
+  const { handleSubmit: hookFormSubmit, register, reset, formState: {errors} } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues ? { appointmentTypeName: defaultValues.appointmentTypeName, appointmentTypePrice: defaultValues.appointmentTypePrice } : {appointmentTypeName: '', appointmentTypePrice: ''}
+    defaultValues: defaultValues ?? {}
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   const { mutateAsync: createCategory, isPending: isCreationPending } = useMutation({
     mutationKey: ['createCategory'],
@@ -71,13 +78,13 @@ export function CreateCategoryModal({onNewCategory, isOpen, defaultValues, refet
             <form onSubmit={handleSubmit} className="flex flex-col gap-y-3">
               <Input
               id="appointmentTypeName" 
-              {...register('appointmentTypeName')} defaultValue={defaultValues?.appointmentTypeName} placeholder="Nome da Catogoria"
+              {...register('appointmentTypeName')} defaultValue={defaultValues? defaultValues.appointmentTypeName : ''} placeholder="Nome da Catogoria"
               error={errors.appointmentTypeName?.message}/>
               
               <Input 
               id="appointmentTypePrice"
               {...register('appointmentTypePrice')} 
-              defaultValue={defaultValues?.appointmentTypePrice} placeholder="Preço Cobrado"
+              defaultValue={defaultValues ? defaultValues.appointmentTypePrice : ''} placeholder="Preço Cobrado"
               error={errors.appointmentTypePrice?.message}/>
               
               <Button type="submit" isPending={isCreationPending || isUpdatePending} disabled={isCreationPending || isUpdatePending}>

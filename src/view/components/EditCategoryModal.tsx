@@ -22,7 +22,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
   const { profileData } = useAuth();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [defaultValues, setDefaultValues] = useState<ICategory | null>(null);
+  const [defaultValues, setDefaultValues] = useState<ICategory | undefined>(undefined);
 
   const handleDefaultValues = ((record: ICategory) => {
     setDefaultValues(record);
@@ -32,7 +32,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
     setModalStatus(prevState => !prevState);
   }, []);
 
-  const { data: typesRecords, refetch: refetchCategories, isPending: isPendingCategories } = useQuery({
+  const { data: typesRecords, refetch: refetchCategories, isFetching: isFetchingCategories, isPending: isPendingCategories } = useQuery({
     queryKey: ['showCategory'],
     queryFn: () => appointmentCategoryService.show({userId: profileData!.sub}),
     enabled: isOpen
@@ -43,11 +43,11 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
       <ModalContainer isOpen={isOpen} onModal={onEditCategory} title="Gerenciar Categorias">
             <section className="mt-4 h-full">
                 <span>Tipos já cadastrados:</span>
-                {isPendingCategories && 
+                {isPendingCategories || isFetchingCategories && 
                 <div className="flex h-full w-full justify-center items-center">
                   <Spinner className="h-12 w-12"/>
                 </div>}
-                {!isPendingCategories && 
+                {!isPendingCategories && !isFetchingCategories && 
                   <ul className="flex flex-col gap-y-3 mt-4 p-3 sm:max-h-56 max-h-72 overflow-auto
                   [&::-webkit-scrollbar]:w-2
                 [&::-webkit-scrollbar-track]:bg-gray-100

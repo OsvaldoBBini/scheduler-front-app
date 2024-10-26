@@ -26,18 +26,25 @@ export interface IAppointment {
   endsAt: string;
   name: string;
   phoneNumber: string;
+  date: string;
 }
 
-const mapper = (data: IInputAppointment[]): IAppointment[] => data.map((appointment: IInputAppointment): IAppointment => ({
-  appointmentId: appointment.SK.split('#')[1],
-  appointmentPayment: appointment.appointmentPayment,
-  appointmentType: appointment.appointmentType,
-  confirmed: appointment.confirmed,
-  startsAt: appointment.startsAt,
-  endsAt: appointment.endsAt,
-  name: appointment.name,
-  phoneNumber: appointment.phoneNumber,
-}))
+const mapper = (data: IInputAppointment[]): IAppointment[] => data.map((appointment: IInputAppointment): IAppointment => {
+
+  const date = appointment.PK.split('DATE#')[1].split('USER#')[0].split('-')
+
+  return {
+    appointmentId: appointment.SK.split('#')[1],
+    date: `${date[2]}-${date[1]}-${date[0]}`,
+    appointmentPayment: appointment.appointmentPayment,
+    appointmentType: appointment.appointmentType,
+    confirmed: appointment.confirmed,
+    startsAt: appointment.startsAt,
+    endsAt: appointment.endsAt,
+    name: appointment.name,
+    phoneNumber: appointment.phoneNumber,
+  }
+})
 
 export async function showAppointment(params: ShowAppointment) {
   const { data } = await httpClient.get(`/appointments/${params.userId}/${params.date}`);
