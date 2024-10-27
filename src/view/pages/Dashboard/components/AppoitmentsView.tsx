@@ -50,15 +50,7 @@ export function AppointmentView() {
       }
       { !isPendingCategories && !isFetchingCategories && 
       
-      <ul className="flex w-full flex-col gap-y-3 mt-4 p-3 sm:max-h-72 max-h-[28rem] overflow-auto
-      [&::-webkit-scrollbar]:w-2
-    [&::-webkit-scrollbar-track]:bg-gray-100
-      [&::-webkit-scrollbar-track]:rounded-full
-    [&::-webkit-scrollbar-thumb]:bg-gray-300
-      [&::-webkit-scrollbar-thumb]:rounded-full
-    dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500
-      ">
+    <ul className='flex w-full flex-col gap-y-3 mt-4 p-3'>
         {appointments?.map((appointment: IAppointment) => 
           <li key={appointment.appointmentId} className="w-full">
               <Card  className={'w-full flex flex-col items-start gap-y-2 mb-4'}>
