@@ -25,7 +25,7 @@ interface IRegisterForm {
 
 const schema = z.object({
   name: z.string().min(1, 'Informe um nome válido'),
-  phoneNumber: z.string().regex(/^55\d{9,10}$/, 'Informe um número válido'),
+  phoneNumber: z.string().regex(/^\d{1,2}\d{9,10}$/, 'Informe um número válido'),
   date: z.string().min(1, 'Informe uma data válida'),
   startAt: z.string().min(1, 'Informe o horário de início'),
   endsAt: z.string().min(1, 'Informe o horário de fim'),
