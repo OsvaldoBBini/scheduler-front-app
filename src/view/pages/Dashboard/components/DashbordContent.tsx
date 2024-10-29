@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AppointmentView } from "./AppoitmentsView";
 import { Plus } from "@phosphor-icons/react";
 import { ReactPortal } from "../../../components/ReactPortal";
@@ -6,8 +6,15 @@ import { CreateCategoryModal } from "../../../components/CreateCategoryModal";
 import { EditCategoryModal } from "../../../components/EditCategoryModal";
 import { RegisterForm } from "./RegisterForm";
 import { Button } from "../../../components/Button";
+import { useAuth } from "../../../../app/hooks/useAuth";
+import { useDateFilters } from "../../../../app/hooks/useDateFilters";
+import { appointmentService } from "../../../../app/services/appointmentsService";
+import { useQuery } from "@tanstack/react-query";
 
 export function DashboardContent() {
+  
+  const { profileData } = useAuth();
+  const { searchDate } = useDateFilters();
   
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
@@ -17,6 +24,16 @@ export function DashboardContent() {
   const handleEditCategory = useCallback(() => setEditCategory(prevState => !prevState), []);
   const handleRegister = useCallback(() => setRegister(prevState => !prevState), []);
 
+  const { data: appointments, isPending: isPendingAppointments, isFetching: isFetchingAppointments, refetch: refetchAppointments } = useQuery({
+    queryKey: ['showAppointment'],
+    queryFn: () => appointmentService.show({userId: profileData!.sub, date: searchDate}),
+  });
+
+  useEffect(() => {
+    if (searchDate) {
+      refetchAppointments()
+    }
+  }, [refetchAppointments, searchDate]);
   
   return(
     <>
@@ -32,12 +49,14 @@ export function DashboardContent() {
       </section>
 
       <section className="flex justify-center">
-        <AppointmentView/>
+        <AppointmentView appointments={appointments} isPendingAppointments={isPendingAppointments} isFetchingAppointments={isFetchingAppointments} refetchAppointments={refetchAppointments}/>
       </section>
 
       <ReactPortal containerID="create-category" children={<CreateCategoryModal isOpen={createNewCategory} onNewCategory={handleNewCategory}/>}/>
+      
       <ReactPortal containerID="edit-category" children={<EditCategoryModal isOpen={editCategory} onEditCategory={handleEditCategory}/>}/>
-      <ReactPortal containerID="register" children={<RegisterForm isOpen={register} onRegister={handleRegister}/>}/>
+      
+      <ReactPortal containerID="register" children={<RegisterForm isOpen={register} onRegister={handleRegister} refetchAppointments={refetchAppointments}/>}/>
     </>
   )
 }

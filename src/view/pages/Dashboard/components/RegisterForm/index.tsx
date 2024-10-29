@@ -20,7 +20,7 @@ interface IRegisterForm {
   onRegister: () => void;
   defaultValues?: IAppointment | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  refetchAppointments?: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
+  refetchAppointments: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
 }
 
 const schema = z.object({
@@ -35,7 +35,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 
-export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm): JSX.Element {
+export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointments}: IRegisterForm): JSX.Element {
 
   const { profileData } = useAuth();
 
@@ -47,7 +47,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm)
 
   const { handleSubmit: hookFormSubmit, register, formState: {errors}, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues ?? {}
   });
 
   useEffect(() => {
@@ -87,6 +86,8 @@ export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm)
 
   });
 
+  console.log(defaultValues)
+
   return (
     <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'}`}>
       <div className="flex sm:items-center sm:justify-center flex-col justify-end items-end h-full">
@@ -97,6 +98,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm)
             <button onClick={() => {
               onRegister()
               reset()
+              refetchAppointments()
             }}>
               <X size={28}/>
             </button>
@@ -163,7 +165,8 @@ export function RegisterForm({isOpen, onRegister, defaultValues}: IRegisterForm)
                     {...register('category')}
                     id='category'
                     error={errors.category?.message}
-                    defaultValue={defaultValues ? JSON.stringify([defaultValues.appointmentType, defaultValues.appointmentPayment]) : ''}>
+                    // defaultValue={defaultValues ? JSON.stringify([defaultValues.appointmentType, defaultValues.appointmentPayment]) : JSON.stringify([''])}
+                    >
                     <>
                       {categories && categories.map((record: ICategory) => 
                       <option key={record.appointmentTypeId} value={JSON.stringify([record.appointmentTypeName, record.appointmentTypePrice])}>{record.appointmentTypeName}</option>

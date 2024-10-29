@@ -1,8 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../../../../app/hooks/useAuth";
-import { useDateFilters } from "../../../../app/hooks/useDateFilters"
-import { appointmentService } from "../../../../app/services/appointmentsService";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { IAppointment } from "../../../../app/services/appointmentsService/showAppointments";
 import { Card } from "../../../components/Card";
 import { Button } from "../../../components/Button";
@@ -10,11 +6,17 @@ import { PencilSimple, Trash, WhatsappLogo } from "@phosphor-icons/react";
 import { Spinner } from "../../../components/Spinner";
 import { ReactPortal } from "../../../components/ReactPortal";
 import { RegisterForm } from "./RegisterForm";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 
-export function AppointmentView() {
+interface IAppointmentView {
+  appointments: IAppointment[] | undefined;
+  isPendingAppointments: boolean;
+  isFetchingAppointments: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  refetchAppointments: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>
+}
 
-  const { profileData } = useAuth();
-  const { searchDate } = useDateFilters();
+export function AppointmentView({appointments, isPendingAppointments, isFetchingAppointments, refetchAppointments}: IAppointmentView) {
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [defaultValues, setDefaultValues] = useState<IAppointment | undefined>(undefined);
@@ -23,32 +25,22 @@ export function AppointmentView() {
     setModalStatus(prevState => !prevState);
   }, []);
 
-  const { data: appointments, isPending: isPendingCategories, isFetching: isFetchingCategories, refetch: refetchAppointments } = useQuery({
-    queryKey: ['showAppointment'],
-    queryFn: () => appointmentService.show({userId: profileData!.sub, date: searchDate}),
-  });
-
   const handleDefaultValues = ((record: IAppointment) => {
     setDefaultValues(record);
     handleModalStatus();
   });
 
-  useEffect(() => {
-    if (searchDate) {
-      refetchAppointments()
-    }
-  }, [refetchAppointments, searchDate]);
 
   return(
     <>
     
     <div className="flex flex-col w-11/12 md:w-2/5 items-center mt-4">
-      { isPendingCategories || isFetchingCategories && 
+      { isPendingAppointments || isFetchingAppointments && 
         <div className="h-96 flex justify-center items-center">
           <Spinner/>
         </div>
       }
-      { !isPendingCategories && !isFetchingCategories && 
+      { !isPendingAppointments && !isFetchingAppointments && 
       
     <ul className='flex w-full flex-col gap-y-3 mt-4 p-3'>
         {appointments?.map((appointment: IAppointment) => 
