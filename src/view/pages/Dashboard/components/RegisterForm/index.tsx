@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { CreateAppointment } from "../../../../../app/services/appointmentsService/createAppointment";
 import { IAppointment } from "../../../../../app/services/appointmentsService/showAppointments";
 import { useEffect } from "react";
+import { UpdateAppointment } from "../../../../../app/services/appointmentsService/updateAppointment";
 
 interface IRegisterForm {
   isOpen: boolean;
@@ -51,7 +52,10 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
 
   useEffect(() => {
     if (defaultValues) {
-      reset(defaultValues);
+      reset({
+        ...defaultValues,
+        category: `${defaultValues.appointmentType}-${defaultValues.appointmentPayment}`
+      });
     }
   }, [defaultValues, reset]);
 
@@ -60,33 +64,63 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
     mutationFn: async (data: CreateAppointment ) => { return appointmentService.create(data); }
   });
 
+  const { mutateAsync: updateAppointment, isPending: isUpdatePending } = useMutation({
+    mutationKey: ['updateAppointment'],
+    mutationFn: async (data: UpdateAppointment ) => { return appointmentService.update(data); }
+  });
+
   const handleSubmit = hookFormSubmit(async (data) => {
 
     const date = data.date.split('-')
-    const category = JSON.parse(data.category);
+    const category = data.category.split('-');
     
-    const newAppointment = {
-      userId: profileData!.sub,
-      appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
-      name: data.name,
-      phoneNumber: data.phoneNumber, 
-      startsAt: data.startAt,
-      endsAt: data.endsAt,
-      appointmentType: category[0],
-      appointmentPayment: category[1]
+    if (defaultValues) {
+      const oldDate = defaultValues.date.split('-')
+
+      const updateAppointmentData = {
+        userId: profileData!.sub,
+        appointmentDate: `${oldDate[2]}-${oldDate[1]}-${oldDate[0]}`,
+        appointmentId: defaultValues.appointmentId,
+        newAppointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
+        name: data.name,
+        phoneNumber: data.phoneNumber, 
+        startsAt: data.startAt,
+        endsAt: data.endsAt,
+        appointmentType: category[0],
+        appointmentPayment: category[1]
+      }
+  
+      await updateAppointment(updateAppointmentData)
+        .then(() => {
+          toast.success('Atendimento atualizado com sucesso!')
+        })
+        .catch(() => {
+          toast.error('Não foi possível atualizar seu atendimento')
+        });
+
+    } else {
+
+      const newAppointment = {
+        userId: profileData!.sub,
+        appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
+        name: data.name,
+        phoneNumber: data.phoneNumber, 
+        startsAt: data.startAt,
+        endsAt: data.endsAt,
+        appointmentType: category[0],
+        appointmentPayment: category[1]
+      }
+  
+      await createAppointment(newAppointment)
+        .then(() => {
+          toast.success('Atendimento agendado com sucesso!')
+        })
+        .catch(() => {
+          toast.error('Não foi possível agendar seu atendimento')
+        });
     }
 
-    await createAppointment(newAppointment)
-      .then(() => {
-        toast.success('Atendimento agendado com sucesso!')
-      })
-      .catch(() => {
-        toast.error('Não foi possível agendar seu atendimento')
-      });
-
   });
-
-  console.log(defaultValues)
 
   return (
     <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'}`}>
@@ -165,18 +199,19 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                     {...register('category')}
                     id='category'
                     error={errors.category?.message}
-                    // defaultValue={defaultValues ? JSON.stringify([defaultValues.appointmentType, defaultValues.appointmentPayment]) : JSON.stringify([''])}
+                    defaultValue={defaultValues ? `${defaultValues.appointmentType}-${defaultValues.appointmentPayment}` : undefined}
                     >
-                    <>
                       {categories && categories.map((record: ICategory) => 
-                      <option key={record.appointmentTypeId} value={JSON.stringify([record.appointmentTypeName, record.appointmentTypePrice])}>{record.appointmentTypeName}</option>
+                      <option key={record.appointmentTypeId} 
+                        value={`${record.appointmentTypeName}-${record.appointmentTypePrice}`}
+                      > {record.appointmentTypeName}
+                      </option>
                       )}
-                    </>
                   </Select>
                 </div>
               </section>
               <div className="flex w-full justify-end mt-5">
-                <Button isPending={isCreationPending}>Registrar</Button>
+                <Button isPending={isCreationPending || isUpdatePending}>Registrar</Button>
               </div>
             </div>
           </form>

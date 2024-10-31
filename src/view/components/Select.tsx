@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils";
 import { XCircle } from "@phosphor-icons/react";
 
 interface InputProps extends ComponentProps<'select'> {
-  children: JSX.Element,
+  children: React.ReactNode,
   error?: string;
 }
 

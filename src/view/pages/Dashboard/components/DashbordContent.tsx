@@ -25,7 +25,7 @@ export function DashboardContent() {
   const handleRegister = useCallback(() => setRegister(prevState => !prevState), []);
 
   const { data: appointments, isPending: isPendingAppointments, isFetching: isFetchingAppointments, refetch: refetchAppointments } = useQuery({
-    queryKey: ['showAppointment'],
+    queryKey: ['showAppointments'],
     queryFn: () => appointmentService.show({userId: profileData!.sub, date: searchDate}),
   });
 
