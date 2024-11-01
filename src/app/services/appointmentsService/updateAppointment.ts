@@ -14,6 +14,6 @@ export interface UpdateAppointment {
 }
 
 export async function updateAppointment(params: UpdateAppointment) {
-  await httpClient.put(`/appointments_type/${params.userId}?appointmentId=${params.appointmentId}`, {...params});
+  await httpClient.put(`/appointments/${params.userId}/${params.appointmentDate}`, {...params});
   return null;
 }

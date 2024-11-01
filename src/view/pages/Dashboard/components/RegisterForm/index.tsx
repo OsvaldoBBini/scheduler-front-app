@@ -87,7 +87,8 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         startsAt: data.startAt,
         endsAt: data.endsAt,
         appointmentType: category[0],
-        appointmentPayment: category[1]
+        appointmentPayment: category[1],
+        confirmed: defaultValues.confirmed
       }
   
       await updateAppointment(updateAppointmentData)
@@ -143,7 +144,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
               <section>
                 <Input
                   {...register('name')}
-                  id="name"
                   placeholder="Nome"
                   defaultValue={defaultValues ?  defaultValues.name : ''}
                   error={errors.name?.message}
@@ -152,7 +152,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
               <section>
                 <Input
                   {...register('phoneNumber')}
-                  id='phoneNumber'
                   placeholder="Telefone"
                   defaultValue={defaultValues ? defaultValues.phoneNumber : ''}
                   error={errors.phoneNumber?.message}
@@ -173,7 +172,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                   <div className="w-full">
                     <Input 
                     {...register('startAt')}
-                    id='startAt' 
                     type='time' 
                     placeholder="Incío"
                     defaultValue={defaultValues? defaultValues.startsAt : ''}
@@ -183,7 +181,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                   <div className="w-full">
                     <Input 
                     {...register('endsAt')} 
-                    id='endsAt'
                     type='time' 
                     placeholder="Fim" 
                     defaultValue={defaultValues? defaultValues.endsAt : ''}
@@ -197,7 +194,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                   <label className="px-3 text-gray-700">Categoria do atendimento</label>
                   <Select className='bg-white rounded-lg border border-gray-500 p-3 h-[52px] text-gray-800 peer focus:border-gray-800' 
                     {...register('category')}
-                    id='category'
                     error={errors.category?.message}
                     defaultValue={defaultValues ? `${defaultValues.appointmentType}-${defaultValues.appointmentPayment}` : undefined}
                     >
@@ -211,7 +207,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                 </div>
               </section>
               <div className="flex w-full justify-end mt-5">
-                <Button isPending={isCreationPending || isUpdatePending}>Registrar</Button>
+                <Button isPending={isCreationPending || isUpdatePending}>{defaultValues ? 'Atualizar' : 'Registrar'}</Button>
               </div>
             </div>
           </form>
