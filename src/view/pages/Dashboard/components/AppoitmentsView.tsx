@@ -100,7 +100,6 @@ export function AppointmentView({appointments, isPendingAppointments, isFetching
                   <div className="flex items-center justify-end gap-x-2">
                     { shouldDelete.appointmentId !== appointment.appointmentId &&
                       <>
-                        <Button className="text-black border-green-400 bg-green-200 hover:bg-green-100 p-2.5 border-[1px]">Confirmar</Button>
                         <Button onClick={() => handleDefaultValues(appointment)} className="p-3">
                           <PencilSimple size={25}/>
                         </Button>
