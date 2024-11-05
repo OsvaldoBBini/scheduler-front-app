@@ -88,7 +88,6 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         endsAt: data.endsAt,
         appointmentType: category[0],
         appointmentPayment: category[1],
-        confirmed: defaultValues.confirmed
       }
   
       await updateAppointment(updateAppointmentData)
@@ -124,9 +123,9 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
   });
 
   return (
-    <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'}`}>
+    <div className={`h-full w-full bg-black fixed z-10 bg-opacity-75 left-0 top-0 ${isOpen ? 'block' : 'hidden'} ${isOpen ? 'animate-fadeIn' : ''} transition-all`}>
       <div className="flex sm:items-center sm:justify-center flex-col justify-end items-end h-full">
-        <div className="bg-white sm:w-2/5 h-4/5 p-4 w-full rounded-t-lg sm: rounded-lg">
+        <div className={`bg-white sm:w-2/5 h-4/5 p-4 w-full rounded-t-lg sm: rounded-lg ${isOpen ? 'sm:animate-fadeIn animate-fadeInUp' : ''}`}>
       
           <header className="flex justify-between pb-3 ">
             <h1 className="text-xl">Novo Atendimento</h1>

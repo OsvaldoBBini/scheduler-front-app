@@ -10,6 +10,41 @@ export default {
       fontFamily: {
         sans: ['"DM Sans"', 'sans-serif']
       },
+      keyframes: {
+        "fadeIn": {
+            "0%": {
+                opacity: 0
+            },
+            "100%": {
+                opacity: 1
+            },
+        },
+        "fadeInUp": {
+            "0%": {
+                opacity: 0,
+                transform: "translate3d(0, 100%, 0)",
+            },
+            "100%": {
+                opacity: 1,
+                transform: "translate3d(0, 0, 0)",
+            },
+        },
+        "fadeInLeft": {
+            "0%": {
+                opacity: 0,
+                transform: "translate3d(-100%, 0, 0)",
+            },
+            "100%": {
+                opacity: 1,
+                transform: "translate3d(0, 0, 0)",
+            },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.3s ease-out forwards',
+        fadeInUp: 'fadeInUp 0.3s ease-out forwards',
+        fadeInLeft: 'fadeInLeft 0.3s ease-out forwards'
+      },
   		colors: {
         gray: {
           50: '#F8F9FA',

@@ -10,7 +10,7 @@ interface IDeleteComponent {
 export function DeleteComponent({onCancelDelete, onDelete, isPending}: IDeleteComponent) {
   return(
       <>
-        <Button className="border-red-700 border-[1px] bg-red-50 text-red-700 hover:bg-red-100" isPending={isPending} onClick={onDelete}>
+        <Button className="border-red-700 border-[1px] bg-red-50 text-red-700 hover:bg-red-100 animate-fadeInLeft transition-all" isPending={isPending} onClick={onDelete}>
           Deletar?
         </Button>
         <Button className="p-2.5 border-[1px] border-gray-600 bg-gray-100 text-gray-600 hover:bg-gray-50" onClick={onCancelDelete}>

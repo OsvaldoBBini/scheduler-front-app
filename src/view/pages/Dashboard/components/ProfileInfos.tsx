@@ -9,7 +9,7 @@ export function ProfileInfos(): JSX.Element {
   
   return (
     <div className="relative">
-      <div className={`p-4 w-48 absolute bg-white top-10 right-0 rounded-2xl shadow-md ${isVisible ? 'block' : 'hidden'}`}>
+      <div className={`p-4 w-48 absolute bg-white top-10 right-0 rounded-2xl shadow-md ${isVisible ? 'block' : 'hidden'} transition-all ${isVisible ? 'animate-fadeIn' : ''}`}>
         <div className="flex flex-col gap-y-3">
           {profileData && 
           
