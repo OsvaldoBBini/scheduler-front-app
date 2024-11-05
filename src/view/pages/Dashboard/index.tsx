@@ -17,7 +17,9 @@ export function Dashboard() {
           <DayFilter/>
         </section>
 
-        <DashboardContent/>
+        <main className="w-full">
+          <DashboardContent/>
+        </main>
 
       </div>
     </DateFiltersProvider>

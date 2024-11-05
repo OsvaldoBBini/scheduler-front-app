@@ -10,7 +10,7 @@ export function Spinner ({className}: SpinnerProps) {
         aria-hidden="true"
         className={
           cn(
-            "w-8 h-8 text-gray-300 animate-spin fill-teal-900",
+            "w-8 h-8 text-gray-300 animate-spin fill-white",
             className
           )
         }

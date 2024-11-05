@@ -28,7 +28,7 @@ const schema = z.object({
   name: z.string().min(1, 'Informe um nome válido'),
   phoneNumber: z.string().regex(/^\d{1,2}\d{9,10}$/, 'Informe um número válido'),
   date: z.string().min(1, 'Informe uma data válida'),
-  startAt: z.string().min(1, 'Informe o horário de início'),
+  startsAt: z.string().min(1, 'Informe o horário de início'),
   endsAt: z.string().min(1, 'Informe o horário de fim'),
   category: z.string().min(1, 'Informe uma categoria'),
 })
@@ -84,7 +84,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         newAppointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
         name: data.name,
         phoneNumber: data.phoneNumber, 
-        startsAt: data.startAt,
+        startsAt: data.startsAt,
         endsAt: data.endsAt,
         appointmentType: category[0],
         appointmentPayment: category[1],
@@ -105,7 +105,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
         name: data.name,
         phoneNumber: data.phoneNumber, 
-        startsAt: data.startAt,
+        startsAt: data.startsAt,
         endsAt: data.endsAt,
         appointmentType: category[0],
         appointmentPayment: category[1]
@@ -144,6 +144,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                 <Input
                   {...register('name')}
                   placeholder="Nome"
+                  id="name"
                   defaultValue={defaultValues ?  defaultValues.name : ''}
                   error={errors.name?.message}
                   />
@@ -152,6 +153,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                 <Input
                   {...register('phoneNumber')}
                   placeholder="Telefone"
+                  id="phoneNumber"
                   defaultValue={defaultValues ? defaultValues.phoneNumber : ''}
                   error={errors.phoneNumber?.message}
                   />
@@ -170,17 +172,19 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                 <div className="flex justify-between w-full gap-x-4">
                   <div className="w-full">
                     <Input 
-                    {...register('startAt')}
+                    {...register('startsAt')}
                     type='time' 
+                    id='startsAt'
                     placeholder="Incío"
                     defaultValue={defaultValues? defaultValues.startsAt : ''}
-                    error={errors.startAt?.message}
+                    error={errors.startsAt?.message}
                     />
                   </div>
                   <div className="w-full">
                     <Input 
                     {...register('endsAt')} 
-                    type='time' 
+                    type='time'
+                    id="endsAt" 
                     placeholder="Fim" 
                     defaultValue={defaultValues? defaultValues.endsAt : ''}
                     error={errors.endsAt?.message}
@@ -193,6 +197,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                   <label className="px-3 text-gray-700">Categoria do atendimento</label>
                   <Select className='bg-white rounded-lg border border-gray-500 p-3 h-[52px] text-gray-800 peer focus:border-gray-800' 
                     {...register('category')}
+                    id="category"
                     error={errors.category?.message}
                     defaultValue={defaultValues ? `${defaultValues.appointmentType}-${defaultValues.appointmentPayment}` : undefined}
                     >

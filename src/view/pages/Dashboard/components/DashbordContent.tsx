@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppointmentView } from "./AppoitmentsView";
 import { Plus } from "@phosphor-icons/react";
 import { ReactPortal } from "../../../components/ReactPortal";
@@ -26,7 +26,7 @@ export function DashboardContent() {
 
   const { data: appointments, isPending: isPendingAppointments, isFetching: isFetchingAppointments, refetch: refetchAppointments } = useQuery({
     queryKey: ['showAppointments'],
-    queryFn: () => appointmentService.show({userId: profileData!.sub, date: searchDate}),
+    queryFn: () => appointmentService.show({userId: profileData!.sub, date: searchDate})
   });
 
   useEffect(() => {
@@ -34,6 +34,8 @@ export function DashboardContent() {
       refetchAppointments()
     }
   }, [refetchAppointments, searchDate]);
+
+  const totalPayment = useMemo(() => appointments?.reduce((acc, curr) => acc + Number(curr.appointmentPayment), 0), [appointments]);
   
   return(
     <>
@@ -51,6 +53,13 @@ export function DashboardContent() {
       <section className="flex justify-center">
         <AppointmentView appointments={appointments} isPendingAppointments={isPendingAppointments} isFetchingAppointments={isFetchingAppointments} refetchAppointments={refetchAppointments}/>
       </section>
+
+      <footer className="flex justify-center">
+        <div className="flex w-11/12 sm:w-2/5 justify-end gap-x-2 border-t-[1px] border-t-gray-100 p-3">
+          <span>Total a ser ganho:</span>
+          <span className="font-bold text-green-700">R$ {totalPayment}</span>
+        </div>
+      </footer>
 
       <ReactPortal containerID="create-category" children={<CreateCategoryModal isOpen={createNewCategory} onNewCategory={handleNewCategory}/>}/>
       

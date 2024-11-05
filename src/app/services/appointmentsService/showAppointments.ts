@@ -10,7 +10,6 @@ interface IInputAppointment {
   SK: string;
   appointmentPayment: string;
   appointmentType: string;
-  confirmed: boolean;
   startsAt: string;
   endsAt: string;
   name: string;
@@ -21,7 +20,6 @@ export interface IAppointment {
   appointmentId: string;
   appointmentPayment: string;
   appointmentType: string;
-  confirmed: boolean;
   startsAt: string;
   endsAt: string;
   name: string;
@@ -38,7 +36,6 @@ const mapper = (data: IInputAppointment[]): IAppointment[] => data.map((appointm
     date: `${date[2]}-${date[1]}-${date[0]}`,
     appointmentPayment: appointment.appointmentPayment,
     appointmentType: appointment.appointmentType,
-    confirmed: appointment.confirmed,
     startsAt: appointment.startsAt,
     endsAt: appointment.endsAt,
     name: appointment.name,
@@ -56,6 +53,6 @@ export async function showAppointment(params: ShowAppointment) {
     const totalMinutesB = hoursB * 60 + minutesB;
 
     return totalMinutesA - totalMinutesB;
-  })
+  });
   return items;
 }
