@@ -34,7 +34,7 @@ export function useLoginController() {
   const handleSubmit = hookFormSubmit(async (data) => {
       setUserEmail(data.email);
       await mutateAsync(data)
-        .then(({accessToken}) => signin(accessToken))
+        .then(({accessToken, refreshToken}) => signin(accessToken, refreshToken))
         .catch((error) => {
           if(error.status === 401) {
             navigate('/confirmation');

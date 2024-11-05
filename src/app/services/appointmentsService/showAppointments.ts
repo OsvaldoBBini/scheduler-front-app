@@ -48,6 +48,14 @@ const mapper = (data: IInputAppointment[]): IAppointment[] => data.map((appointm
 
 export async function showAppointment(params: ShowAppointment) {
   const { data } = await httpClient.get(`/appointments/${params.userId}/${params.date}`);
+  const items = mapper(data.Items).sort((a, b) => {
+    const [hoursA, minutesA] = a.startsAt.split(":").map(Number);
+    const [hoursB, minutesB] = b.startsAt.split(":").map(Number);
+    
+    const totalMinutesA = hoursA * 60 + minutesA;
+    const totalMinutesB = hoursB * 60 + minutesB;
 
-  return mapper(data.Items);
+    return totalMinutesA - totalMinutesB;
+  })
+  return items;
 }

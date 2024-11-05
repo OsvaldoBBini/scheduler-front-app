@@ -1,16 +1,18 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { localStorageKeys } from "../config/localStrogaKeys";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { userService } from "../services/usersService";
 import { httpClient } from "../services/httpClient";
 import toast from "react-hot-toast";
 import { MeResponse } from "../services/usersService/me";
+import { authService } from "../services/authService";
+import { RefreshParams } from "../services/authService/refreshToken";
 
 interface AuthContextValue {
   signedIn: boolean;
   email: string;
   signout(): void;
-  signin(accessToken: string): void
+  signin(accessToken: string, refreshToken: string): void
   setUserEmail(userEmail: string): void;
   profileData: MeResponse | undefined;
 }
@@ -36,6 +38,61 @@ export function AuthProvider({ children }: {
     setEmail(userEmail);
   }, []);
 
+  const { mutateAsync: refreshAuth } = useMutation({
+    mutationKey: ['refreshToken'],
+    mutationFn: async (data: RefreshParams ) => { return authService.refreshToken(data); }
+  });
+
+  useLayoutEffect(() => {
+    const interceptorId = httpClient.interceptors.request.use(config => {
+      const accessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
+    
+      if(accessToken) {
+        config.headers.set('Authorization', `Bearer ${accessToken}`);
+      }
+      
+      return config;
+    });
+
+    return () => {
+      httpClient.interceptors.request.eject(interceptorId);
+    }
+  },[]);
+
+  useLayoutEffect(() => {
+    const interceptorId = httpClient.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+        const refreshToken = localStorage.getItem(localStorageKeys.REFRESH_TOKEN);
+
+        if (originalRequest.url === '/refresh') {
+          setSignedIn(false);
+          localStorage.clear();
+          return Promise.reject(error);
+        }
+
+        if (error.response?.status !== 401 || !refreshToken) {
+          return Promise.reject(error);
+        }
+
+        const {
+          accessToken,
+          refreshToken: newRefreshToken
+        } = await refreshAuth({refreshToken});
+
+        localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(localStorageKeys.REFRESH_TOKEN, newRefreshToken);
+
+        return httpClient(originalRequest);
+      }
+    );
+
+    return () => {
+      httpClient.interceptors.response.eject(interceptorId);
+    };
+  }, [refreshAuth]);
+
   useEffect(() => {
     const storedAccessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN);
     
@@ -44,8 +101,9 @@ export function AuthProvider({ children }: {
     }
   }, [setAccessToken]);
 
-  const signin = useCallback((accessToken: string) => {
+  const signin = useCallback((accessToken: string, refreshToken: string) => {
     localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(localStorageKeys.REFRESH_TOKEN, refreshToken);
     setAccessToken(accessToken)
 
     setSignedIn(true);
