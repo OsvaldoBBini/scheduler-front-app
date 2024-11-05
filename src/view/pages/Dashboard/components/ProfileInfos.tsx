@@ -28,7 +28,7 @@ export function ProfileInfos(): JSX.Element {
       </div>
 
       <button className="flex" onClick={() => setIsVisible(!isVisible)}>
-        <UserCircle size={35} weight="thin"/>
+        <UserCircle size={45} weight="thin"/>
       </button>
     </div>
   )

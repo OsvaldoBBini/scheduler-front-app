@@ -11,7 +11,7 @@ import { ModalContainer } from "./Modal";
 import { Spinner } from "./Spinner";
 import { ICategory } from "../../app/services/appointmentCategoryService/showAppointmentCategory";
 import { DeleteComponent } from "./DeleteComponent";
-import { DeleteAppointmentType } from "../../app/services/appointmentCategoryService/deleteAppointment";
+import { DeleteAppointmentType } from "../../app/services/appointmentCategoryService/deleteAppointmentCategory";
 
 
 interface ICreateCategoryModal {

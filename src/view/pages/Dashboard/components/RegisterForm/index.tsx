@@ -205,9 +205,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                   </Select>
                 </div>
               </section>
-              <div className="flex w-full justify-end mt-5">
-                <Button isPending={isCreationPending || isUpdatePending}>{defaultValues ? 'Atualizar' : 'Registrar'}</Button>
-              </div>
+              <Button isPending={isCreationPending || isUpdatePending}>{defaultValues ? 'Atualizar' : 'Registrar'}</Button>
             </div>
           </form>
         </div>
