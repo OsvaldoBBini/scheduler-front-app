@@ -77,9 +77,9 @@ export function AppointmentView({appointments, isPendingAppointments, isFetching
                   </div>
                 </div>
                 <div>
-                  <a className="bg-green-200 p-2 rounded-2xl flex items-center gap-x-1" href={`https://wa.me/${appointment.phoneNumber}`} target="_blank">
+                  <a className="bg-green-200 p-2 rounded-2xl flex items-center gap-x-1" href={`https://wa.me/${appointment.contact}`} target="_blank">
                     <WhatsappLogo size={20} />
-                    {appointment.phoneNumber}
+                    {appointment.contact}
                   </a>
                 </div>
                 <div className="flex w-full gap-x-4 flex-wrap">

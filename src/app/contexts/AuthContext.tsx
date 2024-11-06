@@ -102,6 +102,12 @@ export function AuthProvider({ children }: {
     }
   }, [setAccessToken]);
 
+  const { data: profileData, isError, isSuccess, isFetching } = useQuery({
+    queryKey: ['users', 'me'],
+    queryFn: () => userService.me(),
+    enabled: signedIn,
+  });
+
   const signin = useCallback((accessToken: string, refreshToken: string) => {
     localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
     localStorage.setItem(localStorageKeys.REFRESH_TOKEN, refreshToken);
@@ -114,12 +120,6 @@ export function AuthProvider({ children }: {
     localStorage.removeItem(localStorageKeys.ACCESS_TOKEN);
     setSignedIn(false);
   }, []);
-
-  const { data: profileData, isError, isSuccess, isFetching } = useQuery({
-    queryKey: ['users', 'me'],
-    queryFn: () => userService.me(),
-    enabled: signedIn,
-  });
 
   useEffect(() => {
     if (isError) {

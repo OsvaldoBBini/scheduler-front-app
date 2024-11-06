@@ -6,7 +6,7 @@ export interface UpdateAppointment {
   appointmentDate: string;
   appointmentId: string;
   name: string;
-  phoneNumber: string;
+  contact: string;
   startsAt: string;
   endsAt: string;
   appointmentType: string;

@@ -4,7 +4,7 @@ export interface CreateAppointment {
   userId: string;
   appointmentDate: string;
   name: string;
-  phoneNumber: string;
+  contact: string;
   startsAt: string;
   endsAt: string;
   appointmentType: string;

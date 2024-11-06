@@ -26,7 +26,7 @@ interface IRegisterForm {
 
 const schema = z.object({
   name: z.string().min(1, 'Informe um nome válido'),
-  phoneNumber: z.string().regex(/^\d{1,2}\d{9,10}$/, 'Informe um número válido'),
+  contact: z.string().regex(/^\d{1,2}\d{9,10}$/, 'Informe um número válido'),
   date: z.string().min(1, 'Informe uma data válida'),
   startsAt: z.string().min(1, 'Informe o horário de início'),
   endsAt: z.string().min(1, 'Informe o horário de fim'),
@@ -83,7 +83,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         appointmentId: defaultValues.appointmentId,
         newAppointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
         name: data.name,
-        phoneNumber: data.phoneNumber, 
+        contact: data.contact, 
         startsAt: data.startsAt,
         endsAt: data.endsAt,
         appointmentType: category[0],
@@ -104,7 +104,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
         userId: profileData!.sub,
         appointmentDate: `${date[2]}-${date[1]}-${date[0]}`,
         name: data.name,
-        phoneNumber: data.phoneNumber, 
+        contact: data.contact, 
         startsAt: data.startsAt,
         endsAt: data.endsAt,
         appointmentType: category[0],
@@ -151,11 +151,11 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
               </section>
               <section>
                 <Input
-                  {...register('phoneNumber')}
-                  placeholder="Telefone"
-                  id="phoneNumber"
-                  defaultValue={defaultValues ? defaultValues.phoneNumber : ''}
-                  error={errors.phoneNumber?.message}
+                  {...register('contact')}
+                  placeholder="Contato"
+                  id="contact"
+                  defaultValue={defaultValues ? defaultValues.contact : ''}
+                  error={errors.contact?.message}
                   />
               </section>
               <section>

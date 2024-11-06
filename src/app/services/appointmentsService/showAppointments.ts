@@ -13,7 +13,7 @@ interface IInputAppointment {
   startsAt: string;
   endsAt: string;
   name: string;
-  phoneNumber: string;
+  contact: string;
 }
 
 export interface IAppointment {
@@ -23,7 +23,7 @@ export interface IAppointment {
   startsAt: string;
   endsAt: string;
   name: string;
-  phoneNumber: string;
+  contact: string;
   date: string;
 }
 
@@ -39,7 +39,7 @@ const mapper = (data: IInputAppointment[]): IAppointment[] => data.map((appointm
     startsAt: appointment.startsAt,
     endsAt: appointment.endsAt,
     name: appointment.name,
-    phoneNumber: appointment.phoneNumber,
+    contact: appointment.contact,
   }
 })
 
