@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { MeResponse } from "../services/usersService/me";
 import { authService } from "../services/authService";
 import { RefreshParams } from "../services/authService/refreshToken";
+import { PageLoader } from "../../view/components/PageLoader";
 
 interface AuthContextValue {
   signedIn: boolean;
@@ -114,7 +115,7 @@ export function AuthProvider({ children }: {
     setSignedIn(false);
   }, []);
 
-  const { data: profileData, isError } = useQuery({
+  const { data: profileData, isError, isSuccess, isFetching } = useQuery({
     queryKey: ['users', 'me'],
     queryFn: () => userService.me(),
     enabled: signedIn,
@@ -127,8 +128,13 @@ export function AuthProvider({ children }: {
     }
   }, [isError, signout]);
 
+
+  if (isFetching) {
+    return <PageLoader/>
+  }
+
   return (
-    <AuthContext.Provider value={{signedIn, signin, signout, setUserEmail, email, profileData}}>
+    <AuthContext.Provider value={{signedIn: isSuccess, signin, signout, setUserEmail, email, profileData}}>
       {children}
     </AuthContext.Provider>
   );
