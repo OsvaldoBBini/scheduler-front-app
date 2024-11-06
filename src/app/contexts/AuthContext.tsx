@@ -134,7 +134,7 @@ export function AuthProvider({ children }: {
   }
 
   return (
-    <AuthContext.Provider value={{signedIn: isSuccess, signin, signout, setUserEmail, email, profileData}}>
+    <AuthContext.Provider value={{signedIn: isSuccess && signedIn, signin, signout, setUserEmail, email, profileData}}>
       {children}
     </AuthContext.Provider>
   );
