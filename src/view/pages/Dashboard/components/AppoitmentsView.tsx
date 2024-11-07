@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { IAppointment } from "../../../../app/services/appointmentsService/showAppointments";
 import { Card } from "../../../components/Card";
 import { Button } from "../../../components/Button";
-import { PencilSimple, Trash, WhatsappLogo } from "@phosphor-icons/react";
+import { MessengerLogo, PencilSimple, Trash, WhatsappLogo } from "@phosphor-icons/react";
 import { Spinner } from "../../../components/Spinner";
 import { ReactPortal } from "../../../components/ReactPortal";
 import { RegisterForm } from "./RegisterForm";
@@ -56,6 +56,11 @@ export function AppointmentView({appointments, isPendingAppointments, isFetching
     refetchAppointments();
   }
 
+  const isPhoneNumber = (value: string): boolean => {
+    const phoneRegex = /(\(?\d{2}\)?\s?)?(\d{4,5}[-.\s]?\d{4})/;
+    return phoneRegex.test(value);
+  }
+
   return(
     <>
     <div className="w-11/12 md:w-2/5 items-center mt-4">
@@ -77,10 +82,17 @@ export function AppointmentView({appointments, isPendingAppointments, isFetching
                   </div>
                 </div>
                 <div>
-                  <a className="bg-green-200 p-2 rounded-2xl flex items-center gap-x-1" href={`https://wa.me/${appointment.contact}`} target="_blank">
-                    <WhatsappLogo size={20} />
-                    {appointment.contact}
-                  </a>
+                  {
+                    isPhoneNumber(appointment.contact) ? 
+                    <a className="bg-green-200 p-2 rounded-2xl flex items-center gap-x-1" href={`https://wa.me/${appointment.contact}`} target="_blank">
+                      <WhatsappLogo size={20} />
+                      {appointment.contact}
+                    </a> : 
+                    <div className="bg-gray-300 p-2 rounded-2xl flex items-center gap-x-1">
+                      <MessengerLogo size={20} />
+                      {appointment.contact}
+                    </div>
+                  }
                 </div>
                 <div className="flex w-full gap-x-4 flex-wrap">
                   <div className="flex flex-col">
