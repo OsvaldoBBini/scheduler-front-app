@@ -160,7 +160,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
               </section>
               <section className="w-full">
                 <Input
-                  className="w-full"
+                  className="w-full appearance-none"
                   {...register('date')}
                   id="date"
                   type="date"
@@ -176,7 +176,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                     {...register('startsAt')}
                     type='time' 
                     id='startsAt'
-                    className="w-full"
+                    className="w-full appearance-none"
                     placeholder="Incío"
                     defaultValue={defaultValues? defaultValues.startsAt : ''}
                     error={errors.startsAt?.message}
@@ -187,6 +187,7 @@ export function RegisterForm({isOpen, onRegister, defaultValues, refetchAppointm
                     {...register('endsAt')} 
                     type='time'
                     id="endsAt" 
+                    className="w-full appearance-none"
                     placeholder="Fim" 
                     defaultValue={defaultValues? defaultValues.endsAt : ''}
                     error={errors.endsAt?.message}
