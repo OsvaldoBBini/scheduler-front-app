@@ -72,7 +72,7 @@ export function EditCategoryModal({onEditCategory, isOpen}: ICreateCategoryModal
                   <Spinner className="h-12 w-12"/>
                 </div>}
                 {!isPendingCategories && !isFetchingCategories && 
-                  <ul className="flex flex-col gap-y-3 mt-4 p-3 sm:max-h-56 max-h-72 overflow-auto
+                  <ul className="flex flex-col gap-y-3 mt-4 p-3 sm:max-h-56 max-h-[75%] overflow-auto
                   [&::-webkit-scrollbar]:w-2
                 [&::-webkit-scrollbar-track]:bg-gray-100
                   [&::-webkit-scrollbar-track]:rounded-full
