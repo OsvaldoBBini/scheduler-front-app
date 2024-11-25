@@ -39,7 +39,8 @@ export function DateFiltersProvider({ children }: {
 
   const searchDate = useMemo(() => {
     const day = daySelection < 10 ? `0${daySelection}` : daySelection;
-    return `${day}-${monthSelection+1}-${yearSelection}`
+    const month = monthSelection < 9 ? `0${monthSelection+1}` : monthSelection+1;
+    return `${day}-${month}-${yearSelection}`
   },[daySelection, monthSelection, yearSelection]);
 
   const months = useMemo(() => [
